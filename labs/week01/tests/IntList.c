@@ -130,6 +130,7 @@ void IntListInsertInOrder(IntList L, int v)
             }
         }
     }
+    L->size++;
 }
 
 
