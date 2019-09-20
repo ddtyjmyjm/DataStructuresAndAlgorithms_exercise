@@ -11,13 +11,15 @@
 #include "IntList.h"
 
 // data structures representing IntList
-struct IntListNode {
+struct IntListNode
+{
     int data;           /**< value of this list item */
     struct IntListNode *next;
     /**< pointer to node containing next element */
 };
 
-struct IntListRep {
+struct IntListRep
+{
     int size;           /**< number of elements in list */
     struct IntListNode *first;
     /**< node containing first value */
@@ -26,7 +28,8 @@ struct IntListRep {
 };
 
 /** Create a new, empty IntList. */
-IntList newIntList(void) {
+IntList newIntList(void)
+{
     struct IntListRep *L = malloc(sizeof *L);
     if (L == NULL) err(EX_OSERR, "couldn't allocate IntList");
     L->size = 0;
@@ -36,11 +39,13 @@ IntList newIntList(void) {
 }
 
 /** Release all resources associated with an IntList. */
-void freeIntList(IntList L) {
+void freeIntList(IntList L)
+{
     if (L == NULL) return;
 
     for (struct IntListNode *curr = L->first, *next;
-         curr != NULL; curr = next) {
+         curr != NULL; curr = next)
+    {
         next = curr->next;
         free(curr);
     }
@@ -50,7 +55,8 @@ void freeIntList(IntList L) {
 
 /** Create an IntList by reading values from a file.
  * Assume that the file is open for reading. */
-IntList getIntList(FILE *inf) {
+IntList getIntList(FILE *inf)
+{
     IntList L = newIntList();
 
     int v;
@@ -61,13 +67,15 @@ IntList getIntList(FILE *inf) {
 }
 
 /** Display IntList as one integer per line on `stdout`. */
-void showIntList(IntList L) {
+void showIntList(IntList L)
+{
     IntListPrint(stdout, L);
 }
 
 /** create a new IntListNode with value v
  * (this function is local to this ADT) */
-static struct IntListNode *newIntListNode(int v) {
+static struct IntListNode *newIntListNode(int v)
+{
     struct IntListNode *n = malloc(sizeof *n);
     if (n == NULL) err(EX_OSERR, "couldn't allocate IntList node");
     n->data = v;
@@ -76,13 +84,15 @@ static struct IntListNode *newIntListNode(int v) {
 }
 
 /** Apppend one integer to the end of an IntList. */
-void IntListInsert(IntList L, int v) {
+void IntListInsert(IntList L, int v)
+{
     assert(L != NULL);
 
     struct IntListNode *n = newIntListNode(v);
     if (L->first == NULL)
         L->first = L->last = n;
-    else {
+    else
+    {
         L->last->next = n;
         L->last = n;
     }
@@ -90,39 +100,50 @@ void IntListInsert(IntList L, int v) {
 }
 
 /** Insert an integer into correct place in a sorted IntList. */
-void IntListInsertInOrder(IntList L, int v) {
+void IntListInsertInOrder(IntList L, int v)
+{
 
-    //test
-    printf("test:\n");
-    showIntList(L);
-    
-    //int length = IntListLength(curList);
-    //struct IntListNode *tempNode;
-    
-    int tempNum;
-    for (struct IntListNode *curNode = L->first; curNode->next == NULL; curNode = curNode->next) {
-        for (struct IntListNode *cprNode = curNode->next; cprNode->next == NULL; cprNode = cprNode->next) {
-            if (curNode->data > cprNode->data) {
-                tempNum = curNode->data;
-                curNode->data = cprNode->data;
-                curNode->data = tempNum;
+    assert(L != NULL);
+    assert(IntListIsSorted(L));
+
+    struct IntListNode *n = newIntListNode(v);
+    if (L->first == NULL)
+        L->first = L->last = n;
+    else if (n->data <= L->first->data)
+    {
+        n->next = L->first;
+        L->first = n;
+    } else if (n->data >= L->last->data)
+    {
+        L->last->next = n;
+        L->last = n;
+    } else
+    {
+        for (struct IntListNode *curr = L->first;
+             curr->next != NULL; curr = curr->next)
+        {
+            if (n->data <= curr->next->data)
+            {
+                n->next = curr->next;
+                curr->next = n;
+                break;
             }
         }
     }
-    // This is INCORRECT
-    IntListInsert(L, v);
 }
 
 
 /** Delete first occurrence of `v` from an IntList.
  * If `v` does not occur in IntList, no effect */
-void IntListDelete(IntList L, int v) {
+void IntListDelete(IntList L, int v)
+{
     assert(L != NULL);
 
     // find where v occurs in list
     struct IntListNode *prev = NULL;
     struct IntListNode *curr = L->first;
-    while (curr != NULL && curr->data != v) {
+    while (curr != NULL && curr->data != v)
+    {
         prev = curr;
         curr = curr->next;
     }
@@ -145,14 +166,16 @@ void IntListDelete(IntList L, int v) {
 }
 
 /** Return number of elements in an IntList. */
-int IntListLength(IntList L) {
+int IntListLength(IntList L)
+{
     assert(L != NULL);
     return L->size;
 }
 
 /** Make a copy of an IntList.
  * New list should look identical to the original list. */
-IntList IntListCopy(IntList L) {
+IntList IntListCopy(IntList L)
+{
     assert(L != NULL);
     struct IntListRep *Lnew = newIntList();
     for (struct IntListNode *curr = L->first;
@@ -162,7 +185,8 @@ IntList IntListCopy(IntList L) {
 }
 
 /** Make a sorted copy of an IntList. */
-IntList IntListSortedCopy(IntList L) {
+IntList IntListSortedCopy(IntList L)
+{
     assert(L != NULL);
     struct IntListRep *Lnew = newIntList();
     for (struct IntListNode *curr = L->first;
@@ -173,7 +197,8 @@ IntList IntListSortedCopy(IntList L) {
 
 /** Check whether an IntList is sorted in ascending order.
  * Returns `false` if list is not sorted, `true` if it is. */
-bool IntListIsSorted(IntList L) {
+bool IntListIsSorted(IntList L)
+{
     assert(L != NULL);
 
     // trivial cases, 0 or 1 items
@@ -191,7 +216,8 @@ bool IntListIsSorted(IntList L) {
 }
 
 /** Check internal consistency of an IntList. */
-bool IntListOK(IntList L) {
+bool IntListOK(IntList L)
+{
     if (L == NULL)
         return true;
 
@@ -201,7 +227,8 @@ bool IntListOK(IntList L) {
     // scan to (but not past) last node
     struct IntListNode *p = L->first;
     int count = 1; // at least one node
-    while (p->next != NULL) {
+    while (p->next != NULL)
+    {
         count++;
         p = p->next;
     }
@@ -211,7 +238,8 @@ bool IntListOK(IntList L) {
 
 /** Display an IntList as one integer per line to a file.
  * Assume that the file is open for writing. */
-void IntListPrint(FILE *outf, IntList L) {
+void IntListPrint(FILE *outf, IntList L)
+{
     assert(L != NULL);
     for (struct IntListNode *curr = L->first;
          curr != NULL; curr = curr->next)
