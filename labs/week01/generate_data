@@ -1,0 +1,21 @@
+#!/bin/sh
+
+echo ===Generate testing data====
+for amount in 5000 10000 20000 50000 100000
+do   
+    for t in 1 2 3 4 5
+    do 
+        # random
+        seq $amount | sort -R > tests/$amount.$t.random.noDupli
+        # sorted
+        seq $amount | sort > tests/$amount.$t.sorted.noDupli
+        # reverse
+        seq $amount | sort -nr > tests/$amount.$t.reverse.noDupli
+        # random
+        ./randList  $amount | sort -R > tests/$amount.$t.random.duplicates
+        # sorted
+        ./randList  $amount | sort > tests/$amount.$t.sorted.duplicates
+        # reverse
+        ./randList  $amount | sort -nr > tests/$amount.$t.reverse.duplicates
+    done
+done
