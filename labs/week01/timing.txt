@@ -1,12 +1,12 @@
-Input   	Initial    	 Has        Number      Avg Time       Avg Time
-Size	Order   	Duplicates  of   runs	    for useIntList   for sort
+Input	Initial      Has        Number      Avg Time        Avg Time
+Size	Order     Duplicates    of runs    for useIntList   for sort
 	
-5000	random	    no           5    	0m0.421‬s	0m0.000s
-5000	sorted	    no           5    	0m0.288s	0m0.000s
-5000	reverse	    no           5    	0m0.288s	0m0.000s
-5000	random	    yes          5    	0m0.422s	0m0.000s
-5000	sorted	    yes          5    	0m0.288s	0m0.000s
-5000	reverse	    yes          5    	0m0.287s	0m0.000s
+5000	random	    no           5           0m0.421‬s	0m0.000s
+5000	sorted	    no           5           0m0.288s	0m0.000s
+5000	reverse	    no           5           0m0.288s	0m0.000s
+5000	random	    yes          5           0m0.422s	0m0.000s
+5000	sorted	    yes          5           0m0.288s	0m0.000s
+5000	reverse	    yes          5           0m0.287s	0m0.000s
 
 10000	random	    no           5           0m1.703s	0m0.004s
 10000	sorted	    no           5           0m1.128s	0m0.000s
@@ -22,19 +22,19 @@ Size	Order   	Duplicates  of   runs	    for useIntList   for sort
 20000	sorted	    yes           5           0m4.485s	0m0.004s
 20000	reverse	    yes           5           0m4.479s	0m0.004s
 
-50000	random	    no	   5    	0m47.613‬s    0m0.026s
-50000	sorted	    no           5    	0m27.897‬s    0m0.011s
-50000	reverse	    no           5    	0m27.890s    0m0.011s
-50000	random	    yes          5    	0m47.616s    0m0.028s
-50000	sorted	    yes          5    	0m27.902s    0m0.012s
-50000	reverse	    yes          5    	0m27.886s    0m0.015s
+50000	random	    no           5           0m47.613‬s    0m0.026s
+50000	sorted	    no           5           0m27.897‬s    0m0.011s
+50000	reverse	    no           5           0m27.890s    0m0.011s
+50000	random	    yes          5           0m47.616s    0m0.028s
+50000	sorted	    yes          5           0m27.902s    0m0.012s
+50000	reverse	    yes          5           0m27.886s    0m0.015s
 
-100000	random	    no	   5    	3m18.866s    0m0.058s
-100000	sorted	    no           5    	1m51.392s    0m0.022s
-100000	reverse	    no           5    	1m51.405s    0m0.026s
-100000	random	    yes	   5    	3m14.309s    0m0.058s
-100000	sorted	    yes	   5    	1m51.452s    0m0.028s
-100000	reverse	    yes	   5     	1m51.436s    0m0.031s
+100000	random	    no           5           3m18.866s    0m0.058s
+100000	sorted	    no           5           1m51.392s    0m0.022s
+100000	reverse	    no           5           1m51.405s    0m0.026s
+100000	random	    yes           5          3m14.309s    0m0.058s
+100000	sorted	    yes           5          1m51.452s    0m0.028s
+100000	reverse	    yes           5          1m51.436s    0m0.031s
 
 It is obviously that the "Avg Time for sort" is much smaller than " Avg Time for useIntList", especially 
 in the case of a large number sizes. I thought various reasons could make "useIntList" go slowly. such 
