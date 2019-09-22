@@ -1,0 +1,29 @@
+#!/bin/sh
+
+echo ===Generate sort testing time====
+mkdir tests/time
+for amount in  5000 10000 20000 50000 100000
+do   
+    for t in 1 2 3 4 5
+    do 
+        # random
+        echo $amount.noDupli.random.$t 
+        { time sort -n < tests/$amount.noDupli.random.$t >  /dev/null ; } 2>&1 |  cat > tests/time/sort.$amount.noDupli.random.$t
+        # sorted
+        echo $amount.noDupli.sorted.$t
+        { time sort -n < tests/$amount.noDupli.sorted.$t >  /dev/null ; } 2>&1 |  cat > tests/time/sort.$amount.noDupli.sorted.$t
+        # reverse
+        echo $amount.noDupli.reverse.$t
+        { time sort -n < tests/$amount.noDupli.reverse.$t >  /dev/null ; } 2>&1 |  cat > tests/time/sort.$amount.noDupli.reverse.$t
+        # random
+        echo $amount.duplicates.random.$t
+        { time sort -n < tests/$amount.duplicates.random.$t > /dev/null ; } 2>&1 |  cat > tests/time/sort.$amount.duplicates.random.$t
+        # sorted
+        echo $amount.duplicates.sorted.$t
+        { time sort -n < tests/$amount.duplicates.sorted.$t > /dev/null ; } 2>&1 |  cat > tests/time/sort.$amount.duplicates.sorted.$t
+        # reverse
+        echo $amount.duplicates.reverse.$t
+        { time sort -n < tests/$amount.duplicates.reverse.$t > /dev/null ; } 2>&1 |  cat > tests/time/sort.$amount.duplicates.reverse.$t
+    done
+done
+echo ===Generate Done====

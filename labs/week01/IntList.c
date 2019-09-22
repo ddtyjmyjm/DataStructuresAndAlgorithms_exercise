@@ -1,5 +1,6 @@
 // IntList.c - Lists of integers
 // Written by John Shepherd, July 2008
+// Modified by Jingming Yang z5283019, Sep 2019
 
 #include <assert.h>
 #include <err.h>
@@ -107,17 +108,23 @@ void IntListInsertInOrder(IntList L, int v)
     assert(IntListIsSorted(L));
 
     struct IntListNode *n = newIntListNode(v);
+    // empty list
     if (L->first == NULL)
         L->first = L->last = n;
+    // smallest value
     else if (n->data <= L->first->data)
     {
         n->next = L->first;
         L->first = n;
-    } else if (n->data >= L->last->data)
+    } 
+    //largest value
+    else if (n->data >= L->last->data)
     {
         L->last->next = n;
         L->last = n;
-    } else
+    } 
+    // else
+    else
     {
         for (struct IntListNode *curr = L->first;
              curr->next != NULL; curr = curr->next)

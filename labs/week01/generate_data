@@ -1,21 +1,29 @@
 #!/bin/sh
 
 echo ===Generate testing data====
+mkdir tests
 for amount in 5000 10000 20000 50000 100000
 do   
     for t in 1 2 3 4 5
     do 
         # random
-        seq $amount | sort -R > tests/$amount.$t.random.noDupli
+        echo tests/$amount.noDupli.random.$t 
+        seq $amount | sort -R > tests/$amount.noDupli.random.$t
         # sorted
-        seq $amount | sort > tests/$amount.$t.sorted.noDupli
+        echo tests/$amount.noDupli.sorted.$t
+        seq $amount | sort -n> tests/$amount.noDupli.sorted.$t
         # reverse
-        seq $amount | sort -nr > tests/$amount.$t.reverse.noDupli
+        echo tests/$amount.noDupli.reverse.$t
+        seq $amount | sort -nr > tests/$amount.noDupli.reverse.$t
         # random
-        ./randList  $amount | sort -R > tests/$amount.$t.random.duplicates
+        echo tests/$amount.duplicates.random.$t
+        ./randList  $amount | sort -R > tests/$amount.duplicates.random.$t
         # sorted
-        ./randList  $amount | sort > tests/$amount.$t.sorted.duplicates
+         echo tests/$amount.duplicates.sorted.$t
+        ./randList  $amount | sort -n > tests/$amount.duplicates.sorted.$t
         # reverse
-        ./randList  $amount | sort -nr > tests/$amount.$t.reverse.duplicates
+        echo tests/$amount.duplicates.reverse.$t
+        ./randList  $amount | sort -nr > tests/$amount.duplicates.reverse.$t
     done
 done
+echo ===Generate Done====
