@@ -227,7 +227,11 @@ bool DLListMoveTo (DLList L, int i)
 void DLListBefore (DLList L, char *it)
 {
 	assert (L != NULL);
-	/// COMPLETE THIS FUNCTION
+	
+	DLListNode *befor=L->curr->prev;
+	DLListNode *insert=newDLListNode(it);
+	
+
 }
 
 /** insert an item after current item
