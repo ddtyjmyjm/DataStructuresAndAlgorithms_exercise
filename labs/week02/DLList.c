@@ -243,7 +243,7 @@ void DLListAfter(DLList L, char *it) {
 
     DLListNode *insert = newDLListNode(it);
     //current was last node
-    if (L->curr = L->last) {
+    if (L->curr == L->last) {
         L->last = insert;
         insert->prev = L->curr;
         L->curr->next = insert;
@@ -268,23 +268,23 @@ void DLListDelete(DLList L) {
     assert(L != NULL);
 
     DLListNode *temp = L->curr; // will be free finally
-    if (L->nitems = 0);      //current was none item
-    else if (L->nitems = 1) {
+    if (L->nitems == 0);      //current was none item
+    else if (L->nitems == 1) {
         //current was only item
         L->first = L->last = L->curr = NULL;
-    } else if {
+    } else if (L->curr==L->first){
         //current was first
         L->first = L->curr->next;
         L->first->prev = NULL;
         L->curr = L->first;
     }
-    else if {
+    else if(L->curr==L->last) {
         //current was last
         L->last = L->curr->prev;
         L->last->next = NULL;
         L->curr = L->last;
     }
-    else if {
+    else {
         //else cases
         L->curr->prev = L->curr->next;
         L->curr->next = L->curr->prev;
