@@ -7,8 +7,8 @@
 
 #include "DLList.h"
 
-bool test(DLList myList);
-
+void test(DLList myList, int chooseFunc);
+void genList(DLList myList, int chooseStates);
 void displayDLLiState(DLList myList);
 
 int main(void) {
@@ -17,26 +17,51 @@ int main(void) {
     assert(validDLList(myList));
 
     // TODO: more tests needed here
+    for (int chooseFunc; chooseFunc < 3; chooseFunc++) {
+        for (int chooseStates = 0; chooseStates < 7; chooseStates++) {
+            genList(myList, chooseStates);
+            test(myList,chooseFunc);
+            freeDLList(myList);
+        }
+    }
+
 
     freeDLList(myList);
     return EXIT_SUCCESS;
 }
 
-bool test(DLList myList) {
-    printf("----test DLListBefore function----\n");
-    printf("state before:\n");
-    displayDLLiState(myList);
-    DLListMoveTo(myList, 1);
-    DLListBefore(myList, "first node\n");
-    DLListMove(myList, 1);
-    DLListBefore(myList, "middle node\n");
-    DLListMoveTo(myList, DLListLength(myList));
-    DLListBefore(myList, "last node\n");
+void test(DLList myList, int chooseFunc) {
+    char **funcName =["DLListBefore", "DLListAfter", "DLListDelete"];
+    printf("----test %pF function----\n", *funcName[chooseFunc]);
+    if (chooseFunc == 0) {
+        DLListBefore(myList, "insert node\n");
+    } else if (chooseFunc == 1) {
+        DLListAfter(myList, "insert node\n");
+    } else if (chooseFunc == 2) {
+        DLListDelete(myList);
+    }
     printf("state after:\n");
     displayDLLiState(myList);
     printf(validDLList(myList) ? "Valid\n" : "Disvalid\n")
-
 }
+
+void genList(DLList myList, int chooseStates) {
+    switch (chooseStates) {
+        case 0: {
+            //curr points to null, nitems = 0
+            myList = newDLList();
+            break;
+        }
+        case 1: {
+            //curr points to first, nitems = 1
+            myList = newDLList();
+            getDLList("one line\n");
+            break;
+        }
+    }
+}
+
+
 
 void displayDLLiState(DLList myList) {
     printf("cuur: %s\n", DLListCurrent(myList));
