@@ -187,6 +187,7 @@ char *DLListCurrent(DLList L) {
  * Return false if we reach the end of list during the move. */
 bool DLListMove(DLList L, int n) {
     assert(L != NULL);
+
     if (L->curr == NULL) {
         return true;
     } else if (n > 0) {
@@ -200,7 +201,6 @@ bool DLListMove(DLList L, int n) {
             n++;
         }
     }
-
     return L->curr != L->first && L->curr != L->last;
 }
 
