@@ -20,5 +20,5 @@ clean:
 	-rm -f myed myed.o
 
 .PHONY: give
-give: DLList.c
+give: DLList.c testList.c
 	give cs2521 lab02 $^
