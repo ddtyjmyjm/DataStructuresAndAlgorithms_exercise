@@ -12,167 +12,201 @@
 
 typedef struct BSTNode *BSTLink;
 
-typedef struct BSTNode {
+typedef struct BSTNode
+{
 	int value;
 	BSTLink left, right;
 } BSTNode;
 
-static BSTree deleteRoot (BSTree);
-static void doShowBSTree (BSTree);
+static BSTree deleteRoot(BSTree);
+static void doShowBSTree(BSTree);
 
 // create a new empty BSTree
-BSTree newBSTree (void)
+BSTree newBSTree(void)
 {
 	return NULL;
 }
 
 // make a new node containing a value
-static BSTLink newBSTNode (int v)
+static BSTLink newBSTNode(int v)
 {
-	BSTLink new = malloc (sizeof *new);
-	if (new == NULL) err (EX_OSERR, "couldn't allocate BST node");
+	BSTLink new = malloc(sizeof *new);
+	if (new == NULL)
+		err(EX_OSERR, "couldn't allocate BST node");
 	new->value = v;
 	new->left = new->right = NULL;
 	return new;
 }
 
 // free memory associated with BSTree
-void dropBSTree (BSTree t)
+void dropBSTree(BSTree t)
 {
 	if (t == NULL)
 		return;
 
-	dropBSTree (t->left);
-	dropBSTree (t->right);
-	free (t);
+	dropBSTree(t->left);
+	dropBSTree(t->right);
+	free(t);
 }
 
 // display a BSTree
-void showBSTree (BSTree t)
+void showBSTree(BSTree t)
 {
-	doShowBSTree (t);
+	doShowBSTree(t);
 }
 
 // display BSTree root node
-void showBSTreeNode (BSTree t)
+void showBSTreeNode(BSTree t)
 {
-	if (t == NULL) return;
-	printf ("%d ", t->value);
+	if (t == NULL)
+		return;
+	printf("%d ", t->value);
 }
 
-
 // print values in infix order
-void BSTreeInfix (BSTree t)
+void BSTreeInfix(BSTree t)
 {
-	if (t == NULL) return;
+	if (t == NULL)
+		return;
 
-	BSTreeInfix (t->left);
-	showBSTreeNode (t);
-	BSTreeInfix (t->right);
+	BSTreeInfix(t->left);
+	showBSTreeNode(t);
+	BSTreeInfix(t->right);
 }
 
 // print values in prefix order
-void BSTreePrefix (BSTree t)
+void BSTreePrefix(BSTree t)
 {
-	if (t == NULL) return;
+	if (t == NULL)
+		return;
 
-	showBSTreeNode (t);
-	BSTreePrefix (t->left);
-	BSTreePrefix (t->right);
+	showBSTreeNode(t);
+	BSTreePrefix(t->left);
+	BSTreePrefix(t->right);
 }
 
 // print values in postfix order
-void BSTreePostfix (BSTree t)
+void BSTreePostfix(BSTree t)
 {
-	if (t == NULL) return;
+	if (t == NULL)
+		return;
 
-	BSTreePostfix (t->left);
-	BSTreePostfix (t->right);
-	showBSTreeNode (t);
+	BSTreePostfix(t->left);
+	BSTreePostfix(t->right);
+	showBSTreeNode(t);
 }
 
 // print values in level-order
-void BSTreeLevelOrder (BSTree t)
+void BSTreeLevelOrder(BSTree t)
 {
-	return; // TODO
+	if (t == NULL)
+		return;
+
+	Queue queue = newQueue();
+	QueueJoin(queue, t);
+	showBSTreeNode(t);
+	while(!QueueIsEmpty(queue))
+	{
+		BSTree temp = QueueLeave(queue);
+		showBSTreeNode(temp->left);
+		showBSTreeNode(temp->right);
+		if (temp->left != NULL)
+			QueueJoin(queue, temp->left);
+		if (temp->right != NULL)
+			QueueJoin(queue, temp->right);
+	}
 }
 
-
 // count #nodes in BSTree
-int BSTreeNumNodes (BSTree t)
+int BSTreeNumNodes(BSTree t)
 {
 	if (t == NULL)
 		return 0;
 	else
-		return 1 + BSTreeNumNodes (t->left) + BSTreeNumNodes (t->right);
+		return 1 + BSTreeNumNodes(t->left) + BSTreeNumNodes(t->right);
 }
 
 // count #leaves in BSTree
-int BSTreeNumLeaves (BSTree t)
+int BSTreeNumLeaves(BSTree t)
 {
-	return 0; // TODO
+
+	if (t == NULL)
+	{
+		return 0;
+	}
+	else if (t->left == NULL && t->right == NULL)
+	{
+		// the node has no child node is a leaf node
+		return 1;
+	}
+	else
+	{
+		return BSTreeNumLeaves(t->left) + BSTreeNumLeaves(t->right);
+	}
 }
 
-
 // insert a new value into a BSTree
-BSTree BSTreeInsert (BSTree t, int v)
+BSTree BSTreeInsert(BSTree t, int v)
 {
 	if (t == NULL)
-		return newBSTNode (v);
+		return newBSTNode(v);
 	else if (v < t->value)
-		t->left = BSTreeInsert (t->left, v);
+		t->left = BSTreeInsert(t->left, v);
 	else if (v > t->value)
-		t->right = BSTreeInsert (t->right, v);
+		t->right = BSTreeInsert(t->right, v);
 	else // (v == t->value)
 		/* don't insert duplicates */;
 	return t;
 }
 
 // check whether a value is in a BSTree
-int BSTreeFind (BSTree t, int v)
+int BSTreeFind(BSTree t, int v)
 {
 	if (t == NULL)
 		return 0;
 	else if (v < t->value)
-		return BSTreeFind (t->left, v);
+		return BSTreeFind(t->left, v);
 	else if (v > t->value)
-		return BSTreeFind (t->right, v);
+		return BSTreeFind(t->right, v);
 	else // (v == t->value)
 		return 1;
 }
 
 // delete a value from a BSTree
-BSTree BSTreeDelete (BSTree t, int v)
+BSTree BSTreeDelete(BSTree t, int v)
 {
 	if (t == NULL)
 		return NULL;
 	else if (v < t->value)
-		t->left = BSTreeDelete (t->left, v);
+		t->left = BSTreeDelete(t->left, v);
 	else if (v > t->value)
-		t->right = BSTreeDelete (t->right, v);
+		t->right = BSTreeDelete(t->right, v);
 	else // (v == t->value)
-		t = deleteRoot (t);
+		t = deleteRoot(t);
 	return t;
 }
 
 // delete root of tree
-static BSTree deleteRoot (BSTree t)
+static BSTree deleteRoot(BSTree t)
 {
 	// if no subtrees, tree empty after delete
-	if (t->left == NULL && t->right == NULL) {
-		free (t);
+	if (t->left == NULL && t->right == NULL)
+	{
+		free(t);
 		return NULL;
 	}
 	// if only right subtree, make it the new root
-	else if (t->left == NULL && t->right != NULL) {
+	else if (t->left == NULL && t->right != NULL)
+	{
 		BSTree hold = t->right;
-		free (t);
+		free(t);
 		return hold;
 	}
 	// if only left subtree, make it the new root
-	else if (t->left != NULL && t->right == NULL) {
+	else if (t->left != NULL && t->right == NULL)
+	{
 		BSTree hold = t->left;
-		free (t);
+		free(t);
 		return hold;
 	}
 	// else (t->left != NULL && t->right != NULL)
@@ -182,12 +216,13 @@ static BSTree deleteRoot (BSTree t)
 	// - delete inorder successor node
 	BSTLink parent = t;
 	BSTLink succ = t->right; // not null!
-	while (succ->left != NULL) {
+	while (succ->left != NULL)
+	{
 		parent = succ;
 		succ = succ->left;
 	}
 	t->value = succ->value;
-	free (succ);
+	free(succ);
 	if (parent == t)
 		parent->right = succ->right;
 	else
@@ -203,7 +238,8 @@ static BSTree deleteRoot (BSTree t)
 
 // data structures
 typedef struct asciinode_struct asciinode;
-struct asciinode_struct {
+struct asciinode_struct
+{
 	asciinode *left, *right;
 	// length of the edge from this node to its children
 	int edge_length;
@@ -216,12 +252,12 @@ struct asciinode_struct {
 };
 
 // functions
-static void print_level (asciinode *node, int x, int level);
-static void compute_edge_lengths (asciinode *node);
-static void compute_lprofile (asciinode *node, int x, int y);
-static void compute_rprofile (asciinode *node, int x, int y);
-static asciinode *build_ascii_tree (BSTree t);
-static void free_ascii_tree (asciinode *node);
+static void print_level(asciinode *node, int x, int level);
+static void compute_edge_lengths(asciinode *node);
+static void compute_lprofile(asciinode *node, int x, int y);
+static void compute_rprofile(asciinode *node, int x, int y);
+static asciinode *build_ascii_tree(BSTree t);
+static void free_ascii_tree(asciinode *node);
 
 #define MAX_HEIGHT 1000
 static int lprofile[MAX_HEIGHT];
@@ -238,72 +274,83 @@ static int gap = 3; // gap between left and right nodes
 static int print_next;
 
 // prints ascii tree for given Tree structure
-static void doShowBSTree (BSTree t)
+static void doShowBSTree(BSTree t)
 {
 	asciinode *proot;
 	int xmin, i;
 	if (t == NULL)
 		return;
-	proot = build_ascii_tree (t);
-	compute_edge_lengths (proot);
+	proot = build_ascii_tree(t);
+	compute_edge_lengths(proot);
 	for (i = 0; i < proot->height && i < MAX_HEIGHT; i++)
 		lprofile[i] = INFINITY;
-	compute_lprofile (proot, 0, 0);
+	compute_lprofile(proot, 0, 0);
 	xmin = 0;
 	for (i = 0; i < proot->height && i < MAX_HEIGHT; i++)
-		xmin = MIN (xmin, lprofile[i]);
-	for (i = 0; i < proot->height; i++) {
+		xmin = MIN(xmin, lprofile[i]);
+	for (i = 0; i < proot->height; i++)
+	{
 		print_next = 0;
-		print_level (proot, -xmin, i);
-		printf ("\n");
+		print_level(proot, -xmin, i);
+		printf("\n");
 	}
-	if (proot->height >= MAX_HEIGHT) {
-		printf (
+	if (proot->height >= MAX_HEIGHT)
+	{
+		printf(
 			"(Tree is taller than %d; may be drawn incorrectly.)\n",
 			MAX_HEIGHT);
 	}
-	free_ascii_tree (proot);
+	free_ascii_tree(proot);
 }
 
 // This function prints the given level of the given tree, assuming
 // that the node has the given x cordinate.
-static void print_level (asciinode *node, int x, int level)
+static void print_level(asciinode *node, int x, int level)
 {
 	int i, isleft;
 	if (node == NULL)
 		return;
 	isleft = (node->parent_dir == -1);
-	if (level == 0) {
+	if (level == 0)
+	{
 		for (i = 0;
 			 i < (x - print_next - ((node->lablen - isleft) / 2));
 			 i++)
-			printf (" ");
+			printf(" ");
 		print_next += i;
-		printf ("%s", node->label);
+		printf("%s", node->label);
 		print_next += node->lablen;
-	} else if (node->edge_length >= level) {
-		if (node->left != NULL) {
-			for (i = 0; i < (x - print_next - (level)); i++) {
-				printf (" ");
+	}
+	else if (node->edge_length >= level)
+	{
+		if (node->left != NULL)
+		{
+			for (i = 0; i < (x - print_next - (level)); i++)
+			{
+				printf(" ");
 			}
 			print_next += i;
-			printf ("/");
+			printf("/");
 			print_next++;
 		}
-		if (node->right != NULL) {
-			for (i = 0; i < (x - print_next + (level)); i++) {
-				printf (" ");
+		if (node->right != NULL)
+		{
+			for (i = 0; i < (x - print_next + (level)); i++)
+			{
+				printf(" ");
 			}
 			print_next += i;
-			printf ("\\");
+			printf("\\");
 			print_next++;
 		}
-	} else {
-		print_level (
+	}
+	else
+	{
+		print_level(
 			node->left,
 			x - node->edge_length - 1,
 			level - node->edge_length - 1);
-		print_level (
+		print_level(
 			node->right,
 			x + node->edge_length + 1,
 			level - node->edge_length - 1);
@@ -312,36 +359,40 @@ static void print_level (asciinode *node, int x, int level)
 
 // This function fills in the edge_length and
 // height fields of the specified tree
-static void compute_edge_lengths (asciinode *node)
+static void compute_edge_lengths(asciinode *node)
 {
 	int h, hmin, i, delta;
 	if (node == NULL)
 		return;
-	compute_edge_lengths (node->left);
-	compute_edge_lengths (node->right);
+	compute_edge_lengths(node->left);
+	compute_edge_lengths(node->right);
 
 	/* first fill in the edge_length of node */
 	if (node->right == NULL && node->left == NULL)
 		node->edge_length = 0;
-	else {
+	else
+	{
 		if (node->left == NULL)
 			hmin = 0;
-		else {
+		else
+		{
 			for (i = 0; i < node->left->height && i < MAX_HEIGHT; i++)
 				rprofile[i] = -INFINITY;
-			compute_rprofile (node->left, 0, 0);
+			compute_rprofile(node->left, 0, 0);
 			hmin = node->left->height;
 		}
 		if (node->right == NULL)
 			hmin = 0;
-		else {
+		else
+		{
 			for (i = 0; i < node->right->height && i < MAX_HEIGHT; i++)
 				lprofile[i] = INFINITY;
-			compute_lprofile (node->right, 0, 0);
-			hmin = MIN (node->right->height, hmin);
+			compute_lprofile(node->right, 0, 0);
+			hmin = MIN(node->right->height, hmin);
 		}
 		delta = 4;
-		for (i = 0; i < hmin; i++) {
+		for (i = 0; i < hmin; i++)
+		{
 			int w = gap + 1 + rprofile[i] - lprofile[i];
 			delta = (delta > w) ? delta : w;
 		}
@@ -358,93 +409,95 @@ static void compute_edge_lengths (asciinode *node)
 	// now fill in the height of node
 	h = 1;
 	if (node->left != NULL)
-		h = MAX (node->left->height + node->edge_length + 1, h);
+		h = MAX(node->left->height + node->edge_length + 1, h);
 	if (node->right != NULL)
-		h = MAX (node->right->height + node->edge_length + 1, h);
+		h = MAX(node->right->height + node->edge_length + 1, h);
 	node->height = h;
 }
 
-static asciinode *build_ascii_tree_recursive (BSTree t)
+static asciinode *build_ascii_tree_recursive(BSTree t)
 {
 	asciinode *node;
 
 	if (t == NULL)
 		return NULL;
-	node = malloc (sizeof (asciinode));
-	node->left = build_ascii_tree_recursive (t->left);
-	node->right = build_ascii_tree_recursive (t->right);
+	node = malloc(sizeof(asciinode));
+	node->left = build_ascii_tree_recursive(t->left);
+	node->right = build_ascii_tree_recursive(t->right);
 	if (node->left != NULL)
 		node->left->parent_dir = -1;
 	if (node->right != NULL)
 		node->right->parent_dir = 1;
-	sprintf (node->label, "%d", t->value);
-	node->lablen = (int) strlen (node->label);
+	sprintf(node->label, "%d", t->value);
+	node->lablen = (int)strlen(node->label);
 
 	return node;
 }
 
 // Copy the tree into the ascii node structre
-static asciinode *build_ascii_tree (BSTree t)
+static asciinode *build_ascii_tree(BSTree t)
 {
 	asciinode *node;
 	if (t == NULL)
 		return NULL;
-	node = build_ascii_tree_recursive (t);
+	node = build_ascii_tree_recursive(t);
 	node->parent_dir = 0;
 	return node;
 }
 
 // Free all the nodes of the given tree
-static void free_ascii_tree (asciinode *node)
+static void free_ascii_tree(asciinode *node)
 {
 	if (node == NULL)
 		return;
-	free_ascii_tree (node->left);
-	free_ascii_tree (node->right);
-	free (node);
+	free_ascii_tree(node->left);
+	free_ascii_tree(node->right);
+	free(node);
 }
 
 // The following function fills in the lprofile array for the given
 // tree. It assumes that the center of the label of the root of this tree
 // is located at a position (x,y).  It assumes that the edge_length
 // fields have been computed for this tree.
-static void compute_lprofile (asciinode *node, int x, int y)
+static void compute_lprofile(asciinode *node, int x, int y)
 {
 	int i, isleft;
 	if (node == NULL)
 		return;
 	isleft = (node->parent_dir == -1);
-	lprofile[y] = MIN (lprofile[y], x - ((node->lablen - isleft) / 2));
-	if (node->left != NULL) {
+	lprofile[y] = MIN(lprofile[y], x - ((node->lablen - isleft) / 2));
+	if (node->left != NULL)
+	{
 		for (i = 1; i <= node->edge_length && y + i < MAX_HEIGHT; i++)
-			lprofile[y + i] = MIN (lprofile[y + i], x - i);
+			lprofile[y + i] = MIN(lprofile[y + i], x - i);
 	}
-	compute_lprofile (
+	compute_lprofile(
 		node->left,
 		x - node->edge_length - 1,
 		y + node->edge_length + 1);
-	compute_lprofile (
+	compute_lprofile(
 		node->right,
 		x + node->edge_length + 1,
 		y + node->edge_length + 1);
 }
 
-static void compute_rprofile (asciinode *node, int x, int y)
+static void compute_rprofile(asciinode *node, int x, int y)
 {
 	int i, notleft;
 	if (node == NULL)
 		return;
 	notleft = (node->parent_dir != -1);
-	rprofile[y] = MAX (rprofile[y], x + ((node->lablen - notleft) / 2));
-	if (node->right != NULL) {
+	rprofile[y] = MAX(rprofile[y], x + ((node->lablen - notleft) / 2));
+	if (node->right != NULL)
+	{
 		for (i = 1; i <= node->edge_length && y + i < MAX_HEIGHT; i++)
-			rprofile[y + i] = MAX (rprofile[y + i], x + i);
+			rprofile[y + i] = MAX(rprofile[y + i], x + i);
 	}
-	compute_rprofile (
+	compute_rprofile(
 		node->left,
 		x - node->edge_length - 1,
 		y + node->edge_length + 1);
-	compute_rprofile (
+	compute_rprofile(
 		node->right,
 		x + node->edge_length + 1,
 		y + node->edge_length + 1);
