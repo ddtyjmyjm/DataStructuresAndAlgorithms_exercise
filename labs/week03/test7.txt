@@ -1,0 +1,16 @@
+Tree:
+      6
+     / \
+    5   7
+   /
+  2
+ / \
+1   3
+     \
+      4
+
+#nodes = 7,  #leaves = 3
+Infix  : 1 2 3 4 5 6 7 
+Prefix : 6 5 2 1 3 4 7 
+Postfix: 1 4 3 2 5 7 6 
+ByLevel: 6 5 7 2 1 3 4 
