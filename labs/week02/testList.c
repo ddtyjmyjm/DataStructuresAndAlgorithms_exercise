@@ -13,7 +13,7 @@ void displayDLListState(DLList myList);
 
 int main(void)
 {
-    // functions each tests 7 different lists(empty, one node, two nodes and curr point to the first...)
+    // each functions tests 7 different lists(empty, one node, two nodes and curr point to the first...)
     char *funcName[] = {"DLListBefore", "DLListAfter", "DLListDelete"};
     for (int chooseFunc = 0; chooseFunc < 3; chooseFunc++)
     {
