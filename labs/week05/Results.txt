@@ -7,17 +7,36 @@ Depth = depth of tree, Cost = average #comparisons per search
 Insert
 Method       Depth      Cost     Depth      Cost     Depth      Cost
 
-L         ________  3114.47  ________  11.75  ________  15.95
+L         5000  3114  13  12  28  16
 
-A         ________  1886.53  ________  1114.67  ________  16.29
+A         5000  1887  2954  1115  28  16
 
-R         ________  ________  ________  ________  ________  ________
+R         2492  952  1774  674  27  15
 
-B         ________  ________  ________  ________  ________  ________
+B         206  63  20  14  23  13
 
-S         ________  ________  ________  ________  ________  ________
+S         5000  24  5000  24  31  23
 
-V         ________  ________  ________  ________  ________  ________
+V         13  12  13  12  15  12
 
 
 Notes (what the above indicates):
+
+For the ascending oder list, common insert method like always inserting at the leaves 
+or at the root will create deepest trees (all of its nodes only have one child ). It's 
+also easy to understand that these search operations that cost a lot. Inserting using 
+the Splay Tree approach will create the same tree, but when search the key, it will "splay" 
+the tree, making the tree more balanced.So the cost of it is not high.
+
+It is good to insert prefix order list at list, so the depth of tree and cost of search 
+are not high. But inserting new values at the root is still not doing very well (Half of 
+its nodes only have one child). Inserting using the splay tree approach is aslo create the 
+deepest tree.
+
+For random list, every approaches of insertion will not create extreme trees. On the whole, the 
+result of these are better than others.
+
+VAL trees always have best tree and minimum cost of search. Cause it rebalances the tree at every
+inserting. So the time of search is always O(logN).
+
+
