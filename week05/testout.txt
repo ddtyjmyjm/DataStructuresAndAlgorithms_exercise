@@ -52,33 +52,6 @@ Found 0 matches; ok
 #nodes = 5000,  depth = 28,  #compares = 179317,  #rotates = 70759
 
 > 
-#nodes = 5000,  depth = 206,  #compares = 351929,  #rotates = 103938
-
-Search for 5000 values known to be in tree
-Found 5000 matches; ok
-Search for 1666 values known to *not* be in tree
-Found 0 matches; ok
-#nodes = 5000,  depth = 206,  #compares = 768704,  #rotates = 103938
-
-> 
-#nodes = 5000,  depth = 20,  #compares = 75098,  #rotates = 97470
-
-Search for 5000 values known to be in tree
-Found 5000 matches; ok
-Search for 1666 values known to *not* be in tree
-Found 0 matches; ok
-#nodes = 5000,  depth = 20,  #compares = 166049,  #rotates = 97470
-
-> 
-#nodes = 5000,  depth = 23,  #compares = 59071,  #rotates = 1168
-
-Search for 5000 values known to be in tree
-Found 5000 matches; ok
-Search for 1666 values known to *not* be in tree
-Found 0 matches; ok
-#nodes = 5000,  depth = 23,  #compares = 145895,  #rotates = 1168
-
-> 
 #nodes = 5000,  depth = 2492,  #compares = 10096,  #rotates = 4999
 
 Search for 5000 values known to be in tree
@@ -104,6 +77,33 @@ Found 5000 matches; ok
 Search for 1666 values known to *not* be in tree
 Found 0 matches; ok
 #nodes = 5000,  depth = 27,  #compares = 171806,  #rotates = 35237
+
+> 
+#nodes = 5000,  depth = 206,  #compares = 351929,  #rotates = 103938
+
+Search for 5000 values known to be in tree
+Found 5000 matches; ok
+Search for 1666 values known to *not* be in tree
+Found 0 matches; ok
+#nodes = 5000,  depth = 206,  #compares = 768704,  #rotates = 103938
+
+> 
+#nodes = 5000,  depth = 20,  #compares = 75098,  #rotates = 97470
+
+Search for 5000 values known to be in tree
+Found 5000 matches; ok
+Search for 1666 values known to *not* be in tree
+Found 0 matches; ok
+#nodes = 5000,  depth = 20,  #compares = 166049,  #rotates = 97470
+
+> 
+#nodes = 5000,  depth = 23,  #compares = 59071,  #rotates = 1168
+
+Search for 5000 values known to be in tree
+Found 5000 matches; ok
+Search for 1666 values known to *not* be in tree
+Found 0 matches; ok
+#nodes = 5000,  depth = 23,  #compares = 145895,  #rotates = 1168
 
 > 
 #nodes = 5000,  depth = 5000,  #compares = 4999,  #rotates = 4999
