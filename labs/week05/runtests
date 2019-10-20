@@ -2,7 +2,7 @@
 
 size=5000
 
-for insert in L A B R S V
+for insert in L A R B S V
 do
 	for order in A P R
 		do
