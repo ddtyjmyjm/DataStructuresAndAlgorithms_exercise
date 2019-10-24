@@ -5,16 +5,76 @@
 
 #include "textbuffer.h"
 
-struct textbuffer {
+typedef struct textLine *Line;
 
+struct textbuffer
+{
+	int len;
+	Line first;
+	Line last;
 };
 
+struct textLine
+{
+	char *line;
+	Line next;
+	Line prev;
+};
+
+/**
+ * 
+ */
+static Line newTextLine(char *text)
+{
+	Line new = malloc(sizeof(Line));
+	new->line = text;
+	return new;
+}
 
 /**
  * Allocate a new textbuffer whose contents is initialised with the text
  * in the given string.
  */
-TB newTB(char *text) {
+TB newTB(char *text)
+{
+	// NULL string
+	if (text == NULL)
+		abort();
+
+	int textLen = strlen(text);
+
+	if (textLen == 0)
+	{ // EMPTY string
+		;
+	}
+	else
+	{
+		char *tempText = malloc(textLen);
+		strcpy(tempText, text);
+		
+		char *ptr = tempText;
+		char *ptrPre = tempText;
+		while (1)
+		{
+			ptr = strrchr(ptr, '\n');
+
+			if (ptr == NULL)
+				break;
+
+			ptr = '\0';
+			Line newLine = malloc(sizeof(newLine));
+
+			char *line = malloc(ptr - ptrPre);
+			strcpy(line, ptrPre);
+			newTextLine(line);
+
+			ptr++;
+			ptrPre = ptr;
+		}
+
+		free(tempText);
+	}
+
 	return NULL;
 }
 
@@ -22,8 +82,8 @@ TB newTB(char *text) {
  * Free  the  memory occupied by the given textbuffer. It is an error to
  * access the buffer afterwards.
  */
-void releaseTB(TB tb) {
-
+void releaseTB(TB tb)
+{
 }
 
 /**
@@ -31,14 +91,16 @@ void releaseTB(TB tb) {
  * textbuffer. If showLineNumbers is true, add a prefix corresponding to
  * the line number.
  */
-char *dumpTB(TB tb, bool showLineNumbers) {
+char *dumpTB(TB tb, bool showLineNumbers)
+{
 	return NULL;
 }
 
 /**
  * Return the number of lines of the given textbuffer.
  */
-int linesTB(TB tb) {
+int linesTB(TB tb)
+{
 	return -1;
 }
 
@@ -47,8 +109,8 @@ int linesTB(TB tb) {
  * - The  program  should abort() wih an error message if 'from' or 'to'
  *   is out of range. The first line of a textbuffer is at position 1.
  */
-void addPrefixTB(TB tb, int from, int to, char *prefix) {
-
+void addPrefixTB(TB tb, int from, int to, char *prefix)
+{
 }
 
 /**
@@ -61,8 +123,8 @@ void addPrefixTB(TB tb, int from, int to, char *prefix) {
  * - The program should abort() with an error message if 'pos' is out of
  *   range.
  */
-void mergeTB(TB tb1, int pos, TB tb2) {
-
+void mergeTB(TB tb1, int pos, TB tb2)
+{
 }
 
 /**
@@ -75,8 +137,8 @@ void mergeTB(TB tb1, int pos, TB tb2) {
  * - The program should abort() with an error message if 'pos' is out of
  *   range.
  */
-void pasteTB(TB tb1, int pos, TB tb2) {
-
+void pasteTB(TB tb1, int pos, TB tb2)
+{
 }
 
 /**
@@ -87,7 +149,8 @@ void pasteTB(TB tb1, int pos, TB tb2) {
  * - The  program should abort() with an error message if 'from' or 'to'
  *   is out of range.
  */
-TB cutTB(TB tb, int from, int to) {
+TB cutTB(TB tb, int from, int to)
+{
 	return NULL;
 }
 
@@ -97,7 +160,8 @@ TB cutTB(TB tb, int from, int to) {
  * - The textbuffer 'tb' should remain unmodified.
  * - The user is responsible for freeing the returned list.
  */
-Match searchTB(TB tb, char *search) {
+Match searchTB(TB tb, char *search)
+{
 	return NULL;
 }
 
@@ -107,8 +171,8 @@ Match searchTB(TB tb, char *search) {
  * - The  program should abort() with an error message if 'from' or 'to'
  *   is out of range.
  */
-void deleteTB(TB tb, int from, int to) {
-
+void deleteTB(TB tb, int from, int to)
+{
 }
 
 /**
@@ -116,22 +180,22 @@ void deleteTB(TB tb, int from, int to) {
  * set of specified substitutions and alter them accordingly.
  * - Refer to the spec for details.
  */
-void formRichText(TB tb) {
-
+void formRichText(TB tb)
+{
 }
 
 ////////////////////////////////////////////////////////////////////////
 // Bonus challenges
 
-char *diffTB(TB tb1, TB tb2) {
+char *diffTB(TB tb1, TB tb2)
+{
 	return NULL;
 }
 
-void undoTB(TB tb) {
-
+void undoTB(TB tb)
+{
 }
 
-void redoTB(TB tb) {
-
+void redoTB(TB tb)
+{
 }
-
