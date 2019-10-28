@@ -1,0 +1,111 @@
+body {
+    line-height: 1.42857142857; /* 10:7 */
+    font-size: 11pt;
+    font-family: 'Open Sans', arial, sans-serif;
+    max-width: 48rem;
+    margin: 1rem auto;
+    padding: 0 1rem;
+}
+
+a {color:#7788DD;text-decoration:none;}
+a.active {color:#7788DD;text-decoration:none;}
+a.inactive {color:#BBBBDD;text-decoration:none;}
+a[href]:hover {color:#CC0000;background:#FFFFCC;}
+small {font-size:75%}
+pre {background:#EEEEFF;border:thin solid #9999CC;margin:5px 20px 5px 20px;padding:4px 8px;}
+tt {font-size:12pt;}
+span.toggle {font-size:67%;}
+span.notice {font-size:110%;}
+span.tiny {font-size:75%;font-weight:normal;}
+span.heading {font-size:18pt;color:#7788DD;}
+span.subheading {font-size:16pt;color:#000000;font-weight:normal;}
+span.marks {font-weight:normal;font-size:75%;}
+span.identifier {color:#993300;font-size:110%;font-weight:bold;font-family:courier;}
+span.contentLink {font-weight:bold;font-size:110%}
+span.contentNote {font-weight:normal;font-size:85%;}
+tr.heading {font-size:large;font-weight:bold;background-color:#DDAA77;}
+table.note {border:thin solid black;padding:2pt;width:75%}
+div.note {border:thin solid black;font-size:90%;margin:5px 60px 5px 60px;padding:4px 8px;}
+dt.item {font-weight:bold;}
+h2 {font-size:16pt;font-weight:300;color:#7788DD;}
+h3 {font-size:14pt;font-weight:300;color:#7788DD;}
+.h2tt {font-size:17pt;font-weight:300;color:#7788DD;font-family:courier;}
+.h3tt {font-size:15pt;font-weight:300;color:#7788DD;font-family:courier;}
+.red {color:#BB0000;}
+.green {color:#006600;}
+.brown {color:#993300;}
+.grey {color:#AAAAAA;}
+.comment {font-size:90%;color:#666666}
+.important {font-weight:bold;color:#CC0000;}
+.bigQ {font-size:13pt;font-style:italic;}
+
+nav .left, nav .right { font-size: 75%; font-weight: normal; }
+nav .left  { float: left; }
+nav .right { float: right; }
+header { clear: both; text-align: center; }
+
+/* Style command entry into various tools. */
+pre > kbd { font-weight: bold; }
+pre > kbd[is="sh"]:before { content: '$ '; font-weight: normal; color: #666; }
+pre > kbd[is="gdb"]:before { content: '(gdb) '; font-weight: normal; color: #666; }
+pre > kbd[is="psql"]:before { content: attr(db) '=# '; font-weight: normal; color: #666; }
+pre > kbd[is="psql,"]:before { content: attr(db) '-# '; font-weight: normal; color: #666; }
+
+/* Set up code indentation. */
+pre { tab-size: 4; -moz-tab-size: 4; }
+
+/* Stolen from Bootstrap 3. */
+dl.dl-horizontal > dt {
+    float: left;
+    width: 16ex;
+    clear: left;
+    text-align: right;
+    font-weight: bold;
+    margin-right: 2ex;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+dl.dl-horizontal > dd { margin-left: 18ex; }
+dl.dl-horizontal > dd:before { content: " "; display: table; }
+dl.dl-horizontal > dd:after { content: " "; display: table; clear: both; }
+
+dl.dl-horizontal > dt,
+dl.dl-horizontal > dd { padding-bottom: 0.25rem; }
+
+/* Footer */
+footer {
+    text-align: center;
+    font-size: 80%;
+    color: #666;
+    margin-top: 1em;
+    border-top: 1px solid #aaa;
+}
+
+/* Info boxes, a la Bootstrap. */
+.alert {
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid grey;
+    border-radius: .25rem;
+
+    max-width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.alert > p, .alert > ul { margin-bottom: 0; }
+.alert > p + p { margin-top: 0.25rem; }
+
+/* Text utilities, a la Bootstrap. */
+.text-left           { text-align: left; }
+.text-right          { text-align: right; }
+.text-center         { text-align: center; }
+.text-justify        { text-align: justify; }
+.text-nowrap         { white-space: nowrap; }
+
+ul.list-inline { margin-left: 0; }
+ul.list-inline > li {
+    list-style: none;
+    display: inline;
+    margin-left: 0.5rem;
+}

@@ -12,38 +12,30 @@
 
 #include "textbuffer.h"
 
-static void testNewTB(void);
 
+
+void testFormRichText(void);
 // TODO: Add more function prototypes
 
 
-int main(void) {
-	
-	testNewTB();
-	
-	// TODO: Call more test functions
-	
-	printf("All tests passed! You are awesome!\n");
+int main(void)
+{
+
+
+    testFormRichText();
+    printf("All tests passed! You are awesome!\n");
 }
 
-static void testNewTB(void) {
-	printf("-----------------------------------------\n"
-	       "               newTB tests               \n"
-	       "-----------------------------------------\n");
 
-	// Calling dumpTB immediately after newTB, without modifying the TB
-	TB tb1 = newTB("hello there,\nhow\nare\nthings\n");
-	assert(linesTB(tb1) == 4);
 
-	char *text1 = dumpTB(tb1, false); // Don't show line numbers
-	assert(strcmp("hello there,\nhow\nare\nthings\n", text1) == 0);
-	free(text1);
 
-	releaseTB(tb1);
-	
-	
-	printf("newTB tests passed!\n");
+
+void testFormRichText(void)
+{
+    printf("-----------------------------------------\n"
+           "               formRichText tests               \n"
+           "-----------------------------------------\n");
+    TB tb1 = newTB("*_ll_*o there,\nhow\nare\nthings\na\nb\nc\nare are are\ne\nf\n");
+    formRichText(tb1);
+    printf("%s", dumpTB(tb1,false));
 }
-
-// TODO: Add more test functions
-
