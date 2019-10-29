@@ -14,6 +14,7 @@
 #include "set.h"
 #include "stack.h"
 #include "url_file.h"
+#include "queue.h"
 
 #define BUFSIZE 1024
 
@@ -27,6 +28,9 @@ int main(int argc, char **argv)
 	char firstURL[BUFSIZE];
 	char next[BUFSIZE];
 	int maxURLs;
+	Queue todoList;
+	Graph graph;
+	Set seenURLs;
 
 	if (argc > 2)
 	{
@@ -42,43 +46,22 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
-	// You need to modify the code below to implement:
-	//
 	// add firstURL to the ToDo list
-	// initialise Graph to hold up to maxURLs
-	// initialise set of Seen URLs
-	// while (ToDo list not empty and Graph not filled) {
-	//    grab Next URL from ToDo list
-	//    if (not allowed) continue
-	//    foreach line in the opened URL {
-	//       foreach URL on that line {
-	//          if (Graph not filled or both URLs in Graph)
-	//             add an edge from Next to this URL
-	//          if (this URL not Seen already) {
-	//             add it to the Seen set
-	//             add it to the ToDo list
-	//          }
-	//       }
-	//    }
-	//    close the opened URL
-	//    sleep(1)
-	// }
-
-	// add firstURL to the ToDo list
-	Quese todoList = newQueue();
+	todoList = newQueue();
 	enterQueue(todoList, firstURL);
 
 	// initialise Graph to hold up to maxURLs
-	Graph graph = newGraph(maxURLs);
+	graph = newGraph(maxURLs);
 
 	// initialise set of Seen URLs
-	Set seenURLs = newSet();
+	seenURLs = newSet();
 
-	while (!emptyQueue(todoList) && nVertices < maxURLs)
+	while (!emptyQueue(todoList) && nVertices(graph) <= maxURLs)
 	{
 		// grab Next URL from ToDo list
-		firstURL = leaveQueue(todoList);
-
+		char * temp=leaveQueue(todoList);
+		strcpy(firstURL, temp);
+		free(temp);
 		// if (not allowed) continue
 		if (!(handle = url_fopen(firstURL, "r")))
 		{
@@ -99,7 +82,7 @@ int main(int argc, char **argv)
 				if (!isElem(seenURLs, result))
 				{
 					insertInto(seenURLs, result);
-					enterQueue(todoList,result);
+					enterQueue(todoList, result);
 					printf("Found: '%s'\n", result);
 				}
 
@@ -108,7 +91,14 @@ int main(int argc, char **argv)
 		}
 		url_fclose(handle);
 		sleep(1);
+
 	}
+	
+	
+	dropSet(seenURLs);
+	
+	dropQueue(todoList);
+	dropGraph(graph);
 	return 0;
 }
 
@@ -135,3 +125,25 @@ static void setFirstURL(char *base, char *first)
 		strcat(first, "/index.html");
 	}
 }
+
+	// You need to modify the code below to implement:
+	//
+	// add firstURL to the ToDo list
+	// initialise Graph to hold up to maxURLs
+	// initialise set of Seen URLs
+	// while (ToDo list not empty and Graph not filled) {
+	//    grab Next URL from ToDo list
+	//    if (not allowed) continue
+	//    foreach line in the opened URL {
+	//       foreach URL on that line {
+	//          if (Graph not filled or both URLs in Graph)
+	//             add an edge from Next to this URL
+	//          if (this URL not Seen already) {
+	//             add it to the Seen set
+	//             add it to the ToDo list
+	//          }
+	//       }
+	//    }
+	//    close the opened URL
+	//    sleep(1)
+	// }
