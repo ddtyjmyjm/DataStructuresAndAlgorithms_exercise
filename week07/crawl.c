@@ -17,9 +17,9 @@
 
 #define BUFSIZE 1024
 
-static void setFirstURL (char *, char *);
+static void setFirstURL(char *, char *);
 
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
 	URL_FILE *handle;
 	char buffer[BUFSIZE];
@@ -28,15 +28,18 @@ int main (int argc, char **argv)
 	char next[BUFSIZE];
 	int maxURLs;
 
-	if (argc > 2) {
-		strcpy (baseURL, argv[1]);
-		setFirstURL (baseURL, firstURL);
-		maxURLs = atoi (argv[2]);
+	if (argc > 2)
+	{
+		strcpy(baseURL, argv[1]);
+		setFirstURL(baseURL, firstURL);
+		maxURLs = atoi(argv[2]);
 		if (maxURLs < 40)
 			maxURLs = 40;
-	} else {
-		fprintf (stderr, "Usage: %s BaseURL MaxURLs\n", argv[0]);
-		exit (1);
+	}
+	else
+	{
+		fprintf(stderr, "Usage: %s BaseURL MaxURLs\n", argv[0]);
+		exit(1);
 	}
 
 	// You need to modify the code below to implement:
@@ -71,58 +74,64 @@ int main (int argc, char **argv)
 	// initialise set of Seen URLs
 	Set seenURLs = newSet();
 
-	while(!emptyQueue(todoList) && nVertices < maxURLs ){
-		char* todoURL = leaveQueue(todoList);
-		
-		URL_FILE file = malloc(sizeof (fcurl_data));
-		file = url_fopen(todoURL,"r");
+	while (!emptyQueue(todoList) && nVertices < maxURLs)
+	{
+		// grab Next URL from ToDo list
+		firstURL = leaveQueue(todoList);
 
-
-
-
-
-
-	}
-
-
-
-
-
-	if (!(handle = url_fopen (firstURL, "r"))) {
-		fprintf (stderr, "Couldn't open %s\n", next);
-		exit (1);
-	}
-	while (!url_feof (handle)) {
-		url_fgets (buffer, sizeof (buffer), handle);
-		// fputs(buffer,stdout);
-		int pos = 0;
-		char result[BUFSIZE];
-		memset (result, 0, BUFSIZE);
-		while ((pos = GetNextURL (buffer, firstURL, result, pos)) > 0) {
-			printf ("Found: '%s'\n", result);
-			memset (result, 0, BUFSIZE);
+		// if (not allowed) continue
+		if (!(handle = url_fopen(firstURL, "r")))
+		{
+			fprintf(stderr, "Couldn't open %s\n", next);
+			exit(1);
 		}
+		while (!url_feof(handle))
+		{
+			url_fgets(buffer, sizeof(buffer), handle);
+			// fputs(buffer,stdout);
+			int pos = 0;
+			char result[BUFSIZE];
+			memset(result, 0, BUFSIZE);
+			while ((pos = GetNextURL(buffer, firstURL, result, pos)) > 0)
+			{
+				if (maxURLs > nVertices(graph) || !isConnected(graph, firstURL, result))
+					addEdge(graph, firstURL, result);
+				if (!isElem(seenURLs, result))
+				{
+					insertInto(seenURLs, result);
+					enterQueue(todoList,result);
+					printf("Found: '%s'\n", result);
+				}
+
+				memset(result, 0, BUFSIZE);
+			}
+		}
+		url_fclose(handle);
+		sleep(1);
 	}
-	url_fclose (handle);
-	sleep (1);
 	return 0;
 }
 
 // setFirstURL(Base,First)
 // - sets a "normalised" version of Base as First
 // - modifies Base to a "normalised" version of itself
-static void setFirstURL (char *base, char *first)
+static void setFirstURL(char *base, char *first)
 {
 	char *c;
-	if ((c = strstr (base, "/index.html")) != NULL) {
-		strcpy (first, base);
+	if ((c = strstr(base, "/index.html")) != NULL)
+	{
+		strcpy(first, base);
 		*c = '\0';
-	} else if (base[strlen (base) - 1] == '/') {
-		strcpy (first, base);
-		strcat (first, "index.html");
-		base[strlen (base) - 1] = '\0';
-	} else {
-		strcpy (first, base);
-		strcat (first, "/index.html");
+	}
+	else if (base[strlen(base) - 1] == '/')
+	{
+		strcpy(first, base);
+		strcat(first, "index.html");
+		base[strlen(base) - 1] = '\0';
+	}
+	else
+	{
+		strcpy(first, base);
+		strcat(first, "/index.html");
 	}
 }
