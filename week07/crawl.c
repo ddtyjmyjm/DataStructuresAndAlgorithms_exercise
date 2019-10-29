@@ -60,6 +60,34 @@ int main (int argc, char **argv)
 	//    close the opened URL
 	//    sleep(1)
 	// }
+
+	// add firstURL to the ToDo list
+	Quese todoList = newQueue();
+	enterQueue(todoList, firstURL);
+
+	// initialise Graph to hold up to maxURLs
+	Graph graph = newGraph(maxURLs);
+
+	// initialise set of Seen URLs
+	Set seenURLs = newSet();
+
+	while(!emptyQueue(todoList) && nVertices < maxURLs ){
+		char* todoURL = leaveQueue(todoList);
+		
+		URL_FILE file = malloc(sizeof (fcurl_data));
+		file = url_fopen(todoURL,"r");
+
+
+
+
+
+
+	}
+
+
+
+
+
 	if (!(handle = url_fopen (firstURL, "r"))) {
 		fprintf (stderr, "Couldn't open %s\n", next);
 		exit (1);
