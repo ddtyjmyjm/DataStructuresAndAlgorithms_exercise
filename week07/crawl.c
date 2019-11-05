@@ -91,12 +91,11 @@ int main(int argc, char **argv)
 		}
 		url_fclose(handle);
 		sleep(1);
-
 	}
 	
+	showGraph(graph,0);	
 	
 	dropSet(seenURLs);
-	
 	dropQueue(todoList);
 	dropGraph(graph);
 	return 0;
