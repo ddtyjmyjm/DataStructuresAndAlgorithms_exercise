@@ -52,6 +52,7 @@ int main(int argc, char* argv[]) {
 	}
 	
 	Graph g = readGraph(argv[1]);
+	GraphShow(g);
 	int i;
 	for (i = 0; i < GraphNumVertices(g); i++) {
 		ShortestPaths paths = dijkstra(g, i);

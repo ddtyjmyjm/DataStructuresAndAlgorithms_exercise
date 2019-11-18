@@ -56,7 +56,6 @@ ShortestPaths dijkstra(Graph g, Vertex src)
        for(int i=0;i<path.numNodes;i++){
         printf("%d:%d\n",i,vSet[i]);
        }
-       
         printf("\nvfind %d\n", vFind);
 
         for (AdjList list = GraphOutIncident(g, vFind); list != NULL; list = list->next)
@@ -66,16 +65,26 @@ ShortestPaths dijkstra(Graph g, Vertex src)
             int weight = list->weight;
             if (path.dist[w] == -1 || path.dist[vFind] + weight < path.dist[w])
             {
+                //test 
+                printf("condition 1\n");
+
+
                 path.dist[w] = weight + path.dist[vFind];
                 freePredNode(path.pred[w]);
                 path.pred[w] = predNodeInsert(path.pred[w], vFind);
             }
             else if (path.dist[vFind] + weight == path.dist[w])
             {
+                //test 
+                printf("condition 2\n");
                 path.pred[w] = predNodeInsert(path.pred[w], vFind);
             }
             vSet[vFind]=1;
+            
         }
+
+        //test
+        printf("finish\n");
     }
     return path;
 }
@@ -87,11 +96,11 @@ void showShortestPaths(ShortestPaths sps)
 void freeShortestPaths(ShortestPaths sps)
 {
     free(sps.dist);
-    for (int i = 0; i < sps.numNodes; i++)
+   /* for (int i = 0; i < sps.numNodes; i++)
     {
         freePredNode(sps.pred[i]);
-    }
-    free(sps.pred);
+    }*/
+    //free(sps.pred);
 }
 
 //////////////////////////////////////////////////////
@@ -110,6 +119,8 @@ static bool validVertex(Graph g, Vertex v)
  */
 static Pred newPredNode(Vertex v)
 {
+    //test
+    printf("add pred node:%d\n",v);
     Pred newNode = malloc(sizeof(*newNode));
     if (newNode == NULL)
     {
@@ -131,6 +142,7 @@ static Pred predNodeInsert(Pred header, Vertex v)
     if (header == NULL)
     {
         Pred n = newPredNode(v);
+        printf("return %d\n",n->v);
         return n;
     }
     else
