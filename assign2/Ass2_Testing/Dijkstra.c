@@ -12,95 +12,108 @@
 typedef struct PredNode *Pred;
 
 static bool validVertex(Graph g, Vertex v);
+
 static Pred newPredNode(Vertex v);
+
 static Pred predNodeInsert(Pred header, Vertex v);
+
 static void freePredNode(Pred pred);
+
 static bool vSetAllScaned(int vSet[], int nV);
+
 static int findMin(int *vSet, int *dist, int nV);
+
+static void noConnectedDist(int *set, int *dist, int nV);
 //////////////////////////////////////////////////////
 
 ShortestPaths dijkstra(Graph g, Vertex src)
 {
     assert(g != NULL);
     assert(validVertex(g, src));
-
     /////----initialazion ShortestPaths----/////
     // define dist -1:infinity | 0:itself
     ShortestPaths path;
     path.numNodes = GraphNumVertices(g);
     path.src = src;
-
-    //int dist[path.numNodes];
     path.dist = malloc(sizeof(int) * path.numNodes);
-    memset(path.dist, -1, sizeof(int)* path.numNodes);
-    //path.dist = dist;
+    memset(path.dist, -1, sizeof(int) * path.numNodes);
     path.dist[src] = 0;
-    path.pred = malloc(sizeof(Pred *) * path.numNodes);
+    path.pred = malloc(sizeof(struct PredNode *) * path.numNodes);
+    for (int i = 0; i < path.numNodes; i++)
+    {
+        path.pred[i] = NULL;
+    }
 
-    ////----
+    ////----initialazion vSet----////
     int vSet[path.numNodes];
     memset(vSet, 0, sizeof(vSet));
-
-    // test
-    printf("\ntest vSet[src]: %d  \npath.dist[src]: %d\n", vSet[src],path.dist[src]);
 
     while (!vSetAllScaned(vSet, path.numNodes))
     {
         Vertex vFind;
         if (vSet[src] == 0)
+        {
             vFind = src;
-        else
+            vSet[src] = 1;
+        } else
+        {
             vFind = findMin(vSet, path.dist, path.numNodes);
-       
-       //test
-       for(int i=0;i<path.numNodes;i++){
-        printf("%d:%d\n",i,vSet[i]);
-       }
-        printf("\nvfind %d\n", vFind);
-
+            if (vFind == -1)
+                break;
+        }
+        // relaxation
         for (AdjList list = GraphOutIncident(g, vFind); list != NULL; list = list->next)
         {
-            
             Vertex w = list->v;
             int weight = list->weight;
             if (path.dist[w] == -1 || path.dist[vFind] + weight < path.dist[w])
             {
-                //test 
-                printf("condition 1\n");
-
-
                 path.dist[w] = weight + path.dist[vFind];
                 freePredNode(path.pred[w]);
+                path.pred[w] = NULL;
                 path.pred[w] = predNodeInsert(path.pred[w], vFind);
-            }
-            else if (path.dist[vFind] + weight == path.dist[w])
+            } else if (path.dist[vFind] + weight == path.dist[w])
             {
-                //test 
-                printf("condition 2\n");
                 path.pred[w] = predNodeInsert(path.pred[w], vFind);
             }
-            vSet[vFind]=1;
-            
         }
-
-        //test
-        printf("finish\n");
+        vSet[vFind] = 1;
     }
+    noConnectedDist(vSet, path.dist, path.numNodes);
     return path;
 }
 
 void showShortestPaths(ShortestPaths sps)
 {
+    printf("----showShortestPaths----:\n");
+
+    printf("src: %d\n", sps.src);
+    printf("dist:\n");
+    for (int i = 0; i < sps.numNodes; i++)
+    {
+        printf("dist[%d] : %d", i, sps.dist[i]);
+    }
+
+    printf("pred:\n");
+    for (int i = 0; i < sps.numNodes; i++)
+    {
+        printf("pred[%d] : ", i);
+        for (Pred p = sps.pred[i]; p != NULL; p = p->next)
+        {
+            printf("%d ", p->v);
+        }
+    }
 }
 
 void freeShortestPaths(ShortestPaths sps)
 {
     free(sps.dist);
-   /* for (int i = 0; i < sps.numNodes; i++)
+    for (int i = 0; i < sps.numNodes; i++)
     {
         freePredNode(sps.pred[i]);
-    }*/
-    //free(sps.pred);
+    }
+    free(sps.pred);
+
 }
 
 //////////////////////////////////////////////////////
@@ -119,8 +132,6 @@ static bool validVertex(Graph g, Vertex v)
  */
 static Pred newPredNode(Vertex v)
 {
-    //test
-    printf("add pred node:%d\n",v);
     Pred newNode = malloc(sizeof(*newNode));
     if (newNode == NULL)
     {
@@ -142,10 +153,8 @@ static Pred predNodeInsert(Pred header, Vertex v)
     if (header == NULL)
     {
         Pred n = newPredNode(v);
-        printf("return %d\n",n->v);
         return n;
-    }
-    else
+    } else
     {
         header->next = predNodeInsert(header->next, v);
         return header;
@@ -153,7 +162,7 @@ static Pred predNodeInsert(Pred header, Vertex v)
 }
 
 /**
- * Free PredNode 
+ * Free PredNode
  */
 static void freePredNode(Pred pred)
 {
@@ -165,7 +174,7 @@ static void freePredNode(Pred pred)
 }
 
 /**
- * check vSet has all been scaned.(all values are 1)  
+ * check vSet has all been scaned.(all values are 1)
  */
 static bool vSetAllScaned(int *vSet, int nV)
 {
@@ -183,7 +192,6 @@ static bool vSetAllScaned(int *vSet, int nV)
  */
 static int findMin(int *vSet, int *dist, int nV)
 {
-
     int minValue = -1;
     int s = -1;
 
@@ -205,6 +213,20 @@ static int findMin(int *vSet, int *dist, int nV)
             }
         }
     }
-
     return s;
+}
+
+/*
+ *  set no connected nodes' dist
+ */
+static void noConnectedDist(int *vSet, int *dist, int nV)
+{
+    for (int i = 0; i < nV; i++)
+    {
+        if (vSet[i] == 0)
+        {
+            vSet[i] = 1;
+            dist[i] = 0;
+        }
+    }
 }
