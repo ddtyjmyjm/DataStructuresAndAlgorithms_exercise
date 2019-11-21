@@ -8,6 +8,7 @@
 #include <string.h>
 #include "Graph.h"
 #include "Dijkstra.h"
+#include "PQ.h"
 
 typedef struct PredNode *Pred;
 
@@ -19,67 +20,65 @@ static Pred predNodeInsert(Pred header, Vertex v);
 
 static void freePredNode(Pred pred);
 
-static bool vSetAllScaned(int vSet[], int nV);
-
-static int findMin(int *vSet, int *dist, int nV);
-
-static void noConnectedDist(int *set, int *dist, int nV);
 //////////////////////////////////////////////////////
 
 ShortestPaths dijkstra(Graph g, Vertex src)
 {
     assert(g != NULL);
     assert(validVertex(g, src));
-    /////----initialazion ShortestPaths----/////
-    // define dist -1:infinity | 0:itself
+    // initialazion ShortestPaths
     ShortestPaths path;
     path.numNodes = GraphNumVertices(g);
     path.src = src;
     path.dist = malloc(sizeof(int) * path.numNodes);
-    memset(path.dist, -1, sizeof(int) * path.numNodes);
-    path.dist[src] = 0;
+    memset(path.dist, 0, sizeof(int) * path.numNodes);
     path.pred = malloc(sizeof(struct PredNode *) * path.numNodes);
     for (int i = 0; i < path.numNodes; i++)
     {
         path.pred[i] = NULL;
     }
 
-    ////----initialazion vSet----////
-    int vSet[path.numNodes];
-    memset(vSet, 0, sizeof(vSet));
-
-    while (!vSetAllScaned(vSet, path.numNodes))
+    PQ pq = PQNew();
+    ItemPQ item = {src, 0};
+    PQAdd(pq, item);
+    while (!PQIsEmpty(pq))
     {
-        Vertex vFind;
-        if (vSet[src] == 0)
-        {
-            vFind = src;
-            vSet[src] = 1;
-        } else
-        {
-            vFind = findMin(vSet, path.dist, path.numNodes);
-            if (vFind == -1)
-                break;
-        }
+        Vertex vFind = PQDequeue(pq).key;
+
         // relaxation
         for (AdjList list = GraphOutIncident(g, vFind); list != NULL; list = list->next)
         {
+
             Vertex w = list->v;
             int weight = list->weight;
-            if (path.dist[w] == -1 || path.dist[vFind] + weight < path.dist[w])
+
+            // w found for the first time?
+            if (w != src && path.dist[w] == 0)
+            {
+                path.dist[w] = weight + path.dist[vFind];
+                path.pred[w] = predNodeInsert(path.pred[w], vFind);
+
+                // first in
+                item.key = w;
+                item.value = path.dist[w];
+                PQAdd(pq, item);
+            }else if (path.dist[vFind] + weight < path.dist[w])
             {
                 path.dist[w] = weight + path.dist[vFind];
                 freePredNode(path.pred[w]);
                 path.pred[w] = NULL;
                 path.pred[w] = predNodeInsert(path.pred[w], vFind);
+                // update
+                item.key = w;
+                item.value = path.dist[w];
+                PQUpdate(pq, item);
             } else if (path.dist[vFind] + weight == path.dist[w])
             {
                 path.pred[w] = predNodeInsert(path.pred[w], vFind);
+
             }
         }
-        vSet[vFind] = 1;
     }
-    noConnectedDist(vSet, path.dist, path.numNodes);
     return path;
 }
 
@@ -173,60 +172,3 @@ static void freePredNode(Pred pred)
     }
 }
 
-/**
- * check vSet has all been scaned.(all values are 1)
- */
-static bool vSetAllScaned(int *vSet, int nV)
-{
-    for (int i = 0; i < nV; i++)
-    {
-        if (vSet[i] == 0)
-            return false;
-    }
-    return true;
-}
-
-/**
- * find s(haven't scaned) in vSet with minimum dist[s].
- * If there are same values, return the first one
- */
-static int findMin(int *vSet, int *dist, int nV)
-{
-    int minValue = -1;
-    int s = -1;
-
-    for (int i = 0; i < nV; i++)
-    {
-        if (vSet[i] == 0 && dist[i] > 0)
-        {
-            // initial s value
-            if (s == -1)
-            {
-                s = i;
-                minValue = dist[i];
-            }
-            // compare
-            if (vSet[i] < minValue)
-            {
-                s = i;
-                minValue = dist[i];
-            }
-        }
-    }
-    return s;
-}
-
-/**
- *  set no connected nodes' dist
- */
-static void noConnectedDist(int *vSet, int *dist, int nV)
-{
-    for (int i = 0; i < nV; i++)
-    {
-        if (vSet[i] == 0)
-        {
-            vSet[i] = 1;
-            dist[i] = 0;
-        }
-    }
-}
