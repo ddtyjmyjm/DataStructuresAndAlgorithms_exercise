@@ -216,7 +216,7 @@ static int findMin(int *vSet, int *dist, int nV)
     return s;
 }
 
-/*
+/**
  *  set no connected nodes' dist
  */
 static void noConnectedDist(int *vSet, int *dist, int nV)
